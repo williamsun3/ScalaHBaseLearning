@@ -2,7 +2,7 @@ name := "ScalaHBase Learning"
 
 version := "1.0"
 
-scalaVersion := "2.12.2"
+scalaVersion := "2.11.11"
 
 libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "15.0",
