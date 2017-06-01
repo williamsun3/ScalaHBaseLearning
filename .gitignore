@@ -1,0 +1,32 @@
+# General
+*.log
+tmp
+dump
+.history
+/*.iml
+/out
+
+# MAC OS
+*.DS_Store
+.DS_Store
+
+# INTELLIJ
+.idea
+.idea_modules
+
+# Eclipse
+.settings
+.cache
+.project
+.classpath
+.scala_dependencies
+bin
+
+# SBT
+dist
+project/project
+project/boot
+project/target
+project/plugins/target
+target
+.target
