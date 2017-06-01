@@ -19,9 +19,9 @@ object DataGenerator {
       "cdn-dataproc-custom-w1";
     println ("hbase.zookeeper.quorum" + ZOOKEEPER_QUORUM);
     
-    conf.set("hbase.zookeeper.quorum", ZOOKEEPER_QUORUM);
+    /**conf.set("hbase.zookeeper.quorum", ZOOKEEPER_QUORUM);
     
-    val admin = new HBaseAdmin(conf)
+    val admin = new HBaseAdmin(conf)**/
 
   }
 }
