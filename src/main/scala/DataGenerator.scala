@@ -51,9 +51,9 @@ object DataGenerator {
     val table = new HTable(conf, tblName);
     val rand = scala.util.Random;
     
-    List.range(0, 1000).foreach(batchCount => {
+    List.range(0, 100).foreach(batchCount => {
       
-      val batch = List.range(0, 10000).map(number => {
+      val batch = List.range(0, 100000).map(number => {
         new Put(Bytes.toBytes("" + ((batchCount * 1000) + number))).
           add(
             Bytes.toBytes(family1),
