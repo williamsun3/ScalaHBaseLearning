@@ -1,10 +1,11 @@
+
 // Library files.
 import org.apache.hadoop.hbase.client._
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.hbase.{
+  HBaseConfiguration,
   HColumnDescriptor,
-  HTableDescriptor,
-  HBaseConfiguration}
+  HTableDescriptor}
 import org.apache.hadoop.conf.Configuration
 
 /**
@@ -16,6 +17,7 @@ object DataGenerator {
 
   def main(args: Array[String]) {
     
+    // Configure the connection.
     val conf : Configuration = HBaseConfiguration.create();
     
     val ZOOKEEPER_QUORUM =
@@ -26,6 +28,7 @@ object DataGenerator {
     
     val admin = new HBaseAdmin(conf);
 
+    // Create the table
     if (admin.tableExists(tblName)) {
       admin.disableTable(tblName);
       admin.deleteTable(tblName);
@@ -37,6 +40,12 @@ object DataGenerator {
     val latteColumnFamilyDesc = new HColumnDescriptor(Bytes.toBytes("latte"));
     tableDesc.addFamily(latteColumnFamilyDesc);
 
-    admin.createTable(tableDesc)
+    admin.createTable(tableDesc);
+    
+    // Add some data.
+    val table = new HTable(conf, tblName);
+    List.range(1, 1000).foreach(number => {
+      
+    });
   }
 }
