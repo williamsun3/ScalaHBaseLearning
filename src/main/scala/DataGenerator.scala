@@ -8,7 +8,7 @@ import org.apache.hadoop.hbase.{
   HTableDescriptor}
 import org.apache.hadoop.conf.Configuration
 
-import scala.collection.immutable.List
+import scala.collection.JavaConverters._
 
 /**
   * Created by peterbugaj on 2017-06-01.
@@ -51,10 +51,10 @@ object DataGenerator {
     val table = new HTable(conf, tblName);
     val rand = scala.util.Random;
     
-    List.range(1, 1000).foreach(batchCount => {
+    List.range(0, 1000).foreach(batchCount => {
       
-      val batch = List.range(1, 10000).map(number => {
-        new Put(Bytes.toBytes("" + (batchCount* number))).
+      val batch = List.range(0, 10000).map(number => {
+        new Put(Bytes.toBytes("" + ((batchCount * 1000) + number))).
           add(
             Bytes.toBytes(family1),
             Bytes.toBytes("store"),
@@ -73,7 +73,7 @@ object DataGenerator {
             Bytes.toBytes("" + rand.nextInt(100)));
       });
       
-      table.put(batch);
+      table.put(batch.asJava);
     });
   }
 }
