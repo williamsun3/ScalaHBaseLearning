@@ -14,6 +14,9 @@ import org.apache.hadoop.conf.Configuration
 object DataGenerator {
 
   val tblName = "StarbucksTable";
+  
+  val family1 = "coffee";
+  val family2 = "latte";
 
   def main(args: Array[String]) {
     
@@ -35,17 +38,44 @@ object DataGenerator {
     }
 
     val tableDesc = new HTableDescriptor(Bytes.toBytes(tblName));
-    val coffeeColumnFamilyDesc = new HColumnDescriptor(Bytes.toBytes("coffee"));
-    tableDesc.addFamily(coffeeColumnFamilyDesc);
-    val latteColumnFamilyDesc = new HColumnDescriptor(Bytes.toBytes("latte"));
-    tableDesc.addFamily(latteColumnFamilyDesc);
+    val columnFamilyDesc1 = new HColumnDescriptor(Bytes.toBytes(family1));
+    tableDesc.addFamily(columnFamilyDesc1);
+    val columnFamilyDesc2 = new HColumnDescriptor(Bytes.toBytes(family2));
+    tableDesc.addFamily(columnFamilyDesc2);
 
     admin.createTable(tableDesc);
     
     // Add some data.
     val table = new HTable(conf, tblName);
+    val rand = scala.util.Random;
+    
     List.range(1, 1000).foreach(number => {
+      val putCmd= new Put(Bytes.toBytes("" + number));
+
+      putCmd.add(
+        Bytes.toBytes(family1),
+        Bytes.toBytes("store"),
+        Bytes.toBytes("" + rand.nextInt(1000)));
+      putCmd.add(
+        Bytes.toBytes(family1),
+        Bytes.toBytes("article"),
+        Bytes.toBytes("" + rand.nextInt(1000)));
       
+      putCmd.add(
+        Bytes.toBytes(family2),
+        Bytes.toBytes("sales"),
+        Bytes.toBytes("" + rand.nextInt(10000)));
+      putCmd.add(
+        Bytes.toBytes(family2),
+        Bytes.toBytes("quantity"),
+        Bytes.toBytes("" + rand.nextInt(100)));
+      
+      table.put(putCmd);
+
+      /*val theget= new Get(Bytes.toBytes("rowkey1"))
+      val result=table.get(theget)
+      val value=result.value()
+      println(Bytes.toString(value))*/
     });
   }
 }
