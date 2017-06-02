@@ -8,6 +8,8 @@ import org.apache.hadoop.hbase.{
   HTableDescriptor}
 import org.apache.hadoop.conf.Configuration
 
+import scala.collection.immutable.List
+
 /**
   * Created by peterbugaj on 2017-06-01.
   */
@@ -49,33 +51,29 @@ object DataGenerator {
     val table = new HTable(conf, tblName);
     val rand = scala.util.Random;
     
-    List.range(1, 1000).foreach(number => {
-      val putCmd= new Put(Bytes.toBytes("" + number));
-
-      putCmd.add(
-        Bytes.toBytes(family1),
-        Bytes.toBytes("store"),
-        Bytes.toBytes("" + rand.nextInt(1000)));
-      putCmd.add(
-        Bytes.toBytes(family1),
-        Bytes.toBytes("article"),
-        Bytes.toBytes("" + rand.nextInt(1000)));
+    List.range(1, 1000).foreach(batchCount => {
       
-      putCmd.add(
-        Bytes.toBytes(family2),
-        Bytes.toBytes("sales"),
-        Bytes.toBytes("" + rand.nextInt(10000)));
-      putCmd.add(
-        Bytes.toBytes(family2),
-        Bytes.toBytes("quantity"),
-        Bytes.toBytes("" + rand.nextInt(100)));
+      val batch = List.range(1, 10000).map(number => {
+        new Put(Bytes.toBytes("" + (batchCount* number))).
+          add(
+            Bytes.toBytes(family1),
+            Bytes.toBytes("store"),
+            Bytes.toBytes("" + rand.nextInt(1000))).
+          add(
+            Bytes.toBytes(family1),
+            Bytes.toBytes("article"),
+            Bytes.toBytes("" + rand.nextInt(1000))).
+          add(
+            Bytes.toBytes(family2),
+            Bytes.toBytes("sales"),
+            Bytes.toBytes("" + rand.nextInt(10000))).
+          add(
+            Bytes.toBytes(family2),
+            Bytes.toBytes("quantity"),
+            Bytes.toBytes("" + rand.nextInt(100)));
+      });
       
-      table.put(putCmd);
-
-      /*val theget= new Get(Bytes.toBytes("rowkey1"))
-      val result=table.get(theget)
-      val value=result.value()
-      println(Bytes.toString(value))*/
+      table.put(batch);
     });
   }
 }
