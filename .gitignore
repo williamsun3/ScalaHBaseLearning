@@ -17,6 +17,7 @@ dump
 # Eclipse
 .settings
 .cache
+.cache-main
 .project
 .classpath
 .scala_dependencies
